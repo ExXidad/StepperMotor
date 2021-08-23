@@ -1,0 +1,409 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 12.2' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     15414,        401]
+NotebookOptionsPosition[     13283,        355]
+NotebookOutlinePosition[     13673,        371]
+CellTagsIndexPosition[     13630,        368]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Motor manipulation functions", "Subsection",
+ CellChangeTimes->{{3.838716637401229*^9, 
+  3.83871664291506*^9}},ExpressionUUID->"c2857fed-7264-4490-b6f6-\
+461cf0cc1aa3"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"motorSetup", "[", "motor_", "]"}], ":=", 
+   RowBox[{"Module", "[", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"{", "\[IndentingNewLine]", "\[IndentingNewLine]", "}"}], 
+     "\[IndentingNewLine]", ",", "\[IndentingNewLine]", 
+     RowBox[{"DeviceConfigure", "[", 
+      RowBox[{"\"\<GPIO\>\"", ",", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"#", "\[Rule]", "\"\<Output\>\""}], "&"}], "/@", 
+        RowBox[{"motor", "[", "\"\<coilPins\>\"", "]"}]}]}], "]"}]}], 
+    "\[IndentingNewLine]", "]"}]}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"setStep", "[", 
+    RowBox[{"motor_", ",", "step_"}], "]"}], ":=", 
+   RowBox[{"Module", "[", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"{", "\[IndentingNewLine]", "\[IndentingNewLine]", "}"}], 
+     "\[IndentingNewLine]", ",", "\[IndentingNewLine]", 
+     RowBox[{"DeviceWrite", "[", 
+      RowBox[{"\"\<GPIO\>\"", ",", 
+       RowBox[{"Thread", "[", 
+        RowBox[{
+         RowBox[{"motor", "[", "\"\<coilPins\>\"", "]"}], "\[Rule]", 
+         RowBox[{
+          RowBox[{"motor", "[", "\"\<coilSequence\>\"", "]"}], "[", 
+          RowBox[{"[", "step", "]"}], "]"}]}], "]"}]}], "]"}]}], 
+    "\[IndentingNewLine]", "]"}]}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"setZero", "[", "motor_", "]"}], ":=", 
+   RowBox[{"Module", "[", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"{", "\[IndentingNewLine]", "\[IndentingNewLine]", "}"}], 
+     "\[IndentingNewLine]", ",", "\[IndentingNewLine]", 
+     RowBox[{"DeviceWrite", "[", 
+      RowBox[{"\"\<GPIO\>\"", ",", 
+       RowBox[{"Thread", "[", 
+        RowBox[{
+         RowBox[{"motor", "[", "\"\<coilPins\>\"", "]"}], "\[Rule]", "0"}], 
+        "]"}]}], "]"}]}], "\[IndentingNewLine]", "]"}]}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"rotateSteps", "[", 
+    RowBox[{"motor_", ",", "steps_"}], "]"}], ":=", 
+   RowBox[{"Module", "[", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"{", "\[IndentingNewLine]", 
+      RowBox[{"nSequenceSteps", "=", 
+       RowBox[{"Length", "@", 
+        RowBox[{"motor", "[", "\"\<coilSequence\>\"", "]"}]}]}], 
+      "\[IndentingNewLine]", "}"}], "\[IndentingNewLine]", ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"Do", "[", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"Do", "[", "\[IndentingNewLine]", 
+         RowBox[{
+          RowBox[{"setStep", "[", 
+           RowBox[{"motor", ",", "sequenceStep"}], "]"}], 
+          "\[IndentingNewLine]", ",", 
+          RowBox[{"{", 
+           RowBox[{"sequenceStep", ",", 
+            RowBox[{
+             RowBox[{"If", "[", 
+              RowBox[{
+               RowBox[{"steps", "<", "0"}], ",", "Reverse", ",", "Identity"}],
+               "]"}], "@", 
+             RowBox[{"Range", "[", 
+              RowBox[{"1", ",", "nSequenceSteps"}], "]"}]}]}], "}"}]}], "]"}],
+         "\[IndentingNewLine]", ",", 
+        RowBox[{"{", 
+         RowBox[{"i", ",", "1", ",", 
+          RowBox[{"Abs", "@", "steps"}]}], "}"}]}], "]"}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"setZero", "[", "motor", "]"}], ";"}]}], "\[IndentingNewLine]", 
+    "]"}]}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"rotateDeg", "[", 
+    RowBox[{"motor_", ",", "deg_"}], "]"}], ":=", 
+   RowBox[{"Module", "[", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"{", "\[IndentingNewLine]", 
+      RowBox[{"degPerStep", "=", 
+       RowBox[{"360.", "/", 
+        RowBox[{"motor", "[", "\"\<stepsPerTurn\>\"", "]"}]}]}], 
+      "\[IndentingNewLine]", "}"}], "\[IndentingNewLine]", ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"rotateSteps", "[", 
+      RowBox[{"motor", ",", 
+       RowBox[{"Round", "[", 
+        RowBox[{"deg", "/", "degPerStep"}], "]"}]}], "]"}]}], 
+    "\[IndentingNewLine]", "]"}]}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"rotateRad", "[", 
+   RowBox[{"motor_", ",", "rad_"}], "]"}], ":=", 
+  RowBox[{"Module", "[", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"{", "\[IndentingNewLine]", 
+     RowBox[{"radPerStep", "=", 
+      RowBox[{"2.", 
+       RowBox[{"Pi", "/", 
+        RowBox[{"motor", "[", "\"\<stepsPerTurn\>\"", "]"}]}]}]}], 
+     "\[IndentingNewLine]", "}"}], "\[IndentingNewLine]", ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"rotateSteps", "[", 
+     RowBox[{"motor", ",", 
+      RowBox[{"Round", "[", 
+       RowBox[{"rad", "/", "radPerStep"}], "]"}]}], "]"}]}], 
+   "\[IndentingNewLine]", "]"}]}]}], "Input",
+ CellChangeTimes->{{3.838714654812378*^9, 3.8387147425782824`*^9}, {
+  3.838714773141488*^9, 3.838714816995102*^9}, {3.838714898319331*^9, 
+  3.838714907064745*^9}, {3.838715031657494*^9, 3.838715058799078*^9}, {
+  3.838715246664708*^9, 3.8387152568875093`*^9}, {3.838716196249248*^9, 
+  3.838716233692233*^9}, {3.838716410147983*^9, 3.838716447081911*^9}, {
+  3.838716500795515*^9, 3.8387166285158463`*^9}, {3.838716893941032*^9, 
+  3.838716908463966*^9}, {3.8387170370975027`*^9, 3.838717086247746*^9}, {
+  3.838717157307026*^9, 3.83871720523794*^9}, {3.838717274625217*^9, 
+  3.8387173139463053`*^9}, {3.838717727593832*^9, 3.838717778112146*^9}},
+ CellLabel->
+  "In[111]:=",ExpressionUUID->"abc727ca-5442-4732-a92f-66cf25213275"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Motor initialization", "Subsection",
+ CellChangeTimes->{{3.838716831754779*^9, 
+  3.838716844052526*^9}},ExpressionUUID->"0a34c351-ec5e-49dc-bfa6-\
+a6cc83e92959"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"motor", "=", 
+   RowBox[{"<|", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"\"\<coilPins\>\"", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{"3", ",", "14", ",", "2", ",", "4"}], "}"}]}], 
+     RowBox[{"(*", 
+      RowBox[{
+      "pink", ",", " ", "orange", ",", " ", "blue", ",", " ", "yellow"}], 
+      "*)"}], ",", "\[IndentingNewLine]", 
+     RowBox[{"\"\<coilSequence\>\"", "->", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"0", ",", "1", ",", "0", ",", "0"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"0", ",", "1", ",", "0", ",", "1"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"0", ",", "0", ",", "0", ",", "1"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"1", ",", "0", ",", "0", ",", "1"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"1", ",", "0", ",", "0", ",", "0"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"1", ",", "0", ",", "1", ",", "0"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"0", ",", "0", ",", "1", ",", "0"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"0", ",", "1", ",", "1", ",", "0"}], "}"}]}], "}"}]}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"\"\<stepsPerTurn\>\"", "\[Rule]", "512"}]}], 
+    "\[IndentingNewLine]", "|>"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"motorSetup", "[", "motor", "]"}], ";"}]}], "Input",
+ CellChangeTimes->{
+  3.8387152620318327`*^9, {3.8387153372074003`*^9, 3.8387153561792603`*^9}, {
+   3.8387154048573647`*^9, 3.8387155461454163`*^9}, {3.838715619986641*^9, 
+   3.838715657218954*^9}, 3.8387161512363567`*^9, 3.838716194973665*^9, {
+   3.838716239120084*^9, 3.838716260443055*^9}, {3.838716348159059*^9, 
+   3.838716366403328*^9}, {3.8387181029651623`*^9, 3.838718103537381*^9}, {
+   3.838718413757605*^9, 3.838718437396422*^9}, {3.838718533847354*^9, 
+   3.83871858075327*^9}},ExpressionUUID->"5244a011-d3ef-4724-ae94-\
+fe598980cc3d"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Testing section", "Subsection",
+ CellChangeTimes->{{3.838716665421296*^9, 
+  3.838716668324963*^9}},ExpressionUUID->"026443c8-fd8e-4c6c-9250-\
+4d96b8e9c2c6"],
+
+Cell[BoxData[
+ RowBox[{"rotateSteps", "[", 
+  RowBox[{"motor", ",", 
+   RowBox[{"-", "5"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.838714744836965*^9, 3.838714749835697*^9}, {
+   3.838715997168173*^9, 3.838715999780614*^9}, {3.838716108325612*^9, 
+   3.8387161376332207`*^9}, {3.838716300854191*^9, 3.838716332496408*^9}, {
+   3.838716464593958*^9, 3.838716466578107*^9}, 3.838716747993882*^9, {
+   3.838718038692027*^9, 3.8387180414580727`*^9}, {3.8387180775134172`*^9, 
+   3.83871808671205*^9}},
+ CellLabel->
+  "In[126]:=",ExpressionUUID->"1342d2c1-129b-4b86-8e7c-8dad522d4fcb"],
+
+Cell[BoxData[
+ RowBox[{"rotateDeg", "[", 
+  RowBox[{"motor", ",", "360"}], "]"}]], "Input",
+ CellChangeTimes->{{3.838717092644816*^9, 3.838717102255288*^9}, {
+  3.838717324639566*^9, 3.838717374800765*^9}, {3.838717898841964*^9, 
+  3.838717959840131*^9}, {3.838717994685849*^9, 3.838717995804942*^9}, {
+  3.838718111570827*^9, 3.838718126421467*^9}},
+ CellLabel->
+  "In[131]:=",ExpressionUUID->"be22cacd-6e2d-436e-ada0-04e986020908"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"DeviceWrite", "[", 
+  RowBox[{"\"\<GPIO\>\"", ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"3", "\[Rule]", "0"}], ",", 
+     RowBox[{"4", "\[Rule]", "0"}]}], "}"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.838714818415358*^9, 3.838714819459776*^9}, {
+  3.838715072798524*^9, 3.8387150934895067`*^9}, {3.8387155578311977`*^9, 
+  3.8387155632841883`*^9}},
+ CellLabel->"In[32]:=",ExpressionUUID->"722de482-b30f-4e91-9a99-18f06e9263de"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"3", "\[Rule]", "0"}], ",", 
+   RowBox[{"4", "\[Rule]", "0"}]}], "}"}]], "Output",
+ CellChangeTimes->{{3.838715081635741*^9, 3.8387150944740257`*^9}, 
+   3.838715564175609*^9},
+ CellLabel->"Out[32]=",ExpressionUUID->"9b79790d-71b9-420c-bcd4-ce5e189182c2"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Thread", "[", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"1", ",", "2", ",", "3"}], "}"}], "\[Rule]", 
+   RowBox[{"{", 
+    RowBox[{"4", ",", "5", ",", "6"}], "}"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.83871560310355*^9, 3.8387156130425*^9}},
+ CellLabel->"In[33]:=",ExpressionUUID->"672708ad-5606-41d5-91a7-263752b7924f"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"1", "\[Rule]", "4"}], ",", 
+   RowBox[{"2", "\[Rule]", "5"}], ",", 
+   RowBox[{"3", "\[Rule]", "6"}]}], "}"}]], "Output",
+ CellChangeTimes->{3.8387156134438477`*^9},
+ CellLabel->"Out[33]=",ExpressionUUID->"8102bf59-09cc-48d8-aae9-a48441427f0e"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"motor", "[", "\"\<coil_pins\>\"", "]"}]], "Input",
+ CellChangeTimes->{{3.83871441581721*^9, 3.838714431273695*^9}},
+ CellLabel->"In[10]:=",ExpressionUUID->"0ca7cd01-13bc-4723-9d3f-8ed6ae85665b"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"3", ",", "14", ",", "2", ",", "4"}], "}"}]], "Output",
+ CellChangeTimes->{{3.838714417807886*^9, 3.838714431894252*^9}},
+ CellLabel->"Out[10]=",ExpressionUUID->"fd55e567-240a-4e14-b22c-e4041e44a503"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"ExternalEvaluate", "[", 
+  RowBox[{
+  "session", ",", 
+   "\"\<[[0,1,0,0],\n    [0,1,0,1],\n    [0,0,0,1],\n    [1,0,0,1],\n    \
+[1,0,0,0],\n    [1,0,1,0],\n    [0,0,1,0],\n    [0,1,1,0]\n    ]\>\""}], 
+  "]"}]], "Input",
+ CellChangeTimes->{{3.8387144538271503`*^9, 3.838714481607444*^9}},
+ CellLabel->"In[12]:=",ExpressionUUID->"9c5f037f-87c4-429a-b19c-8d92932919a8"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"0", ",", "1", ",", "0", ",", "0"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0", ",", "1", ",", "0", ",", "1"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0", ",", "0", ",", "0", ",", "1"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"1", ",", "0", ",", "0", ",", "1"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"1", ",", "0", ",", "0", ",", "0"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"1", ",", "0", ",", "1", ",", "0"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0", ",", "0", ",", "1", ",", "0"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0", ",", "1", ",", "1", ",", "0"}], "}"}]}], "}"}]], "Output",
+ CellChangeTimes->{{3.838714470886215*^9, 3.838714482622739*^9}},
+ CellLabel->"Out[12]=",ExpressionUUID->"b2377c18-9c0a-45ae-802e-04c1567c2bb3"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"motor", "[", "\"\<coilSequence\>\"", "]"}], "[", 
+  RowBox[{"[", "0", "]"}], "]"}]], "Input",
+ CellChangeTimes->{{3.8387186479540367`*^9, 3.83871869330142*^9}},
+ CellLabel->
+  "In[136]:=",ExpressionUUID->"f8b95879-d980-4d58-878e-2e7d5a040290"],
+
+Cell[BoxData["List"], "Output",
+ CellChangeTimes->{{3.838718658128035*^9, 3.8387186937153673`*^9}},
+ CellLabel->
+  "Out[136]=",ExpressionUUID->"6b21de16-86ba-454b-9991-aa8a3404f4dd"]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{1440, 852},
+WindowMargins->{{0, Automatic}, {0, Automatic}},
+FrontEndVersion->"12.2 for Linux ARM (32-bit) (March 25, 2021)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"95ee8ee2-cf0f-4011-8b80-7c9c8b54338f"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 175, 3, 54, "Subsection",ExpressionUUID->"c2857fed-7264-4490-b6f6-461cf0cc1aa3"],
+Cell[758, 27, 5362, 129, 1091, "Input",ExpressionUUID->"abc727ca-5442-4732-a92f-66cf25213275"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[6157, 161, 168, 3, 54, "Subsection",ExpressionUUID->"0a34c351-ec5e-49dc-bfa6-a6cc83e92959"],
+Cell[6328, 166, 1968, 44, 133, "Input",ExpressionUUID->"5244a011-d3ef-4724-ae94-fe598980cc3d"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[8333, 215, 163, 3, 54, "Subsection",ExpressionUUID->"026443c8-fd8e-4c6c-9250-4d96b8e9c2c6"],
+Cell[8499, 220, 582, 11, 29, "Input",ExpressionUUID->"1342d2c1-129b-4b86-8e7c-8dad522d4fcb"],
+Cell[9084, 233, 433, 8, 29, "Input",ExpressionUUID->"be22cacd-6e2d-436e-ada0-04e986020908"],
+Cell[CellGroupData[{
+Cell[9542, 245, 460, 10, 29, "Input",ExpressionUUID->"722de482-b30f-4e91-9a99-18f06e9263de"],
+Cell[10005, 257, 306, 7, 33, "Output",ExpressionUUID->"9b79790d-71b9-420c-bcd4-ce5e189182c2"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[10348, 269, 348, 8, 29, "Input",ExpressionUUID->"672708ad-5606-41d5-91a7-263752b7924f"],
+Cell[10699, 279, 296, 7, 33, "Output",ExpressionUUID->"8102bf59-09cc-48d8-aae9-a48441427f0e"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[11032, 291, 218, 3, 29, "Input",ExpressionUUID->"0ca7cd01-13bc-4723-9d3f-8ed6ae85665b"],
+Cell[11253, 296, 239, 4, 33, "Output",ExpressionUUID->"fd55e567-240a-4e14-b22c-e4041e44a503"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[11529, 305, 393, 8, 195, "Input",ExpressionUUID->"9c5f037f-87c4-429a-b19c-8d92932919a8"],
+Cell[11925, 315, 830, 20, 33, "Output",ExpressionUUID->"b2377c18-9c0a-45ae-802e-04c1567c2bb3"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[12792, 340, 278, 6, 29, "Input",ExpressionUUID->"f8b95879-d980-4d58-878e-2e7d5a040290"],
+Cell[13073, 348, 182, 3, 33, "Output",ExpressionUUID->"6b21de16-86ba-454b-9991-aa8a3404f4dd"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
